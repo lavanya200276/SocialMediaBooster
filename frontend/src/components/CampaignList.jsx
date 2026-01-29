@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import Dashboard from "./Dashboard";
 
-const API_URL = "http://127.0.0.1:8000/campaigns/";
-const CONVERT_URL = "http://127.0.0.1:8000/convert-budget";
+const API_URL = "https://socialmediabooster.onrender.com";
+const CONVERT_URL = "https://socialmediabooster.onrender.com/convert-budget";
 
 export default function CampaignList() {
   const [campaigns, setCampaigns] = useState([]);
@@ -193,20 +193,16 @@ export default function CampaignList() {
                       <td>{c.name}</td>
                       <td>₹{c.budget}</td>
                       <td>{c.platform}</td>
-                      <td style={{ display: "flex", gap: "8px" }}>
-                        <button onClick={() => handleEdit(c)}>Edit</button>
-                        <button
-                          onClick={() => showUsdConversion(c.budget)}
-                        >
-                          USD
-                        </button>
-                        <button
-                          className="danger"
-                          onClick={() => handleDelete(c.id)}
-                        >
-                          Delete
-                        </button>
-                      </td>
+                      <td>
+  <div className="action-buttons">
+    <button onClick={() => handleEdit(c)}>Edit</button>
+    <button onClick={() => showUsdConversion(c.budget)}>USD</button>
+    <button className="danger" onClick={() => handleDelete(c.id)}>
+      Delete
+    </button>
+  </div>
+</td>
+
                     </tr>
                   ))}
                 </tbody>

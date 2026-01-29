@@ -1,4 +1,5 @@
-const API_URL = "http://127.0.0.1:8000/campaigns";
+const API_URL = "https://socialmediabooster.onrender.com";
+
 
 export async function getCampaigns() {
   const res = await fetch(`${API_URL}/campaigns/`);
