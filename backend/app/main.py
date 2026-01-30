@@ -21,16 +21,14 @@ def root():
 
 @app.get("/convert-budget")
 def convert_budget(amount: float):
-    response = requests.get("https://open.er-api.com/v6/latest/INR")
+    url = "https://api.exchangerate.host/latest?base=INR"
+    response = requests.get(url)
     data = response.json()
 
-    # safety check
-    if data.get("result") != "success":
-        raise HTTPException(status_code=500, detail="Currency API failed")
-
     usd_rate = data["rates"]["USD"]
+    usd_amount = round(amount * usd_rate, 2)
 
     return {
         "inr": amount,
-        "usd": round(amount * usd_rate, 2)
+        "usd": usd_amount
     }
