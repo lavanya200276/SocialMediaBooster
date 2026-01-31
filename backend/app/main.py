@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi import Query
 from fastapi.middleware.cors import CORSMiddleware
 from app.routes import campaigns
 import requests
@@ -19,16 +20,11 @@ app.include_router(campaigns.router)
 def root():
     return {"status": "API running"}
 
+
 @app.get("/convert-budget")
 def convert_budget(amount: float):
-    url = "https://api.exchangerate.host/latest?base=INR"
-    response = requests.get(url)
-    data = response.json()
-
-    usd_rate = data["rates"]["USD"]
-    usd_amount = round(amount * usd_rate, 2)
-
+    usd_rate = 0.012   # fixed simple rate
     return {
         "inr": amount,
-        "usd": usd_amount
+        "usd": round(amount * usd_rate, 2)
     }
