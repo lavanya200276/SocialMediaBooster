@@ -19,7 +19,7 @@ export async function createCampaign(data) {
 }
 
 export async function updateCampaign(id, data) {
-  const res = await fetch(`${API_URL}/${id}`, {
+  const res = await fetch(`${API_URL}/${editingId}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",

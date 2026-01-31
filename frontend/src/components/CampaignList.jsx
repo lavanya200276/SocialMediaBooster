@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import Dashboard from "./Dashboard";
 
-const API_URL = "https://socialmediabooster.onrender.com";
+const API_URL = "https://socialmediabooster.onrender.com/campaigns";
 const CONVERT_URL = "https://socialmediabooster.onrender.com/convert-budget";
+
 
 export default function CampaignList() {
   const [campaigns, setCampaigns] = useState([]);
@@ -15,10 +16,16 @@ export default function CampaignList() {
 
   /* ---------------- FETCH ---------------- */
   const fetchCampaigns = async () => {
+  try {
     const res = await fetch(API_URL);
     const data = await res.json();
-    setCampaigns(data);
-  };
+    setCampaigns(Array.isArray(data) ? data : []);
+  } catch (error) {
+    console.error("Error fetching campaigns:", error);
+  }
+};
+
+
 
   useEffect(() => {
     fetchCampaigns();
@@ -60,7 +67,7 @@ export default function CampaignList() {
   /* ---------------- DELETE ---------------- */
   const handleDelete = async (id) => {
     if (!window.confirm("Delete this campaign?")) return;
-    await fetch(`${API_URL}${id}`, { method: "DELETE" });
+    await fetch(`${API_URL}/${id}`, { method: "DELETE" });
     fetchCampaigns();
   };
 
@@ -212,7 +219,7 @@ export default function CampaignList() {
       </div>
     </div>
 
-      {showModal && (
+      {showModal && conversion && (
         <div
           style={{
             position: "fixed",
