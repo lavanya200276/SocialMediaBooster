@@ -55,45 +55,90 @@ GET /convert-budget?amount=1000
 
 ---
 
-##  Local Setup Instructions
+Local Setup
+Prerequisites
 
-### Prerequisites
-- Node.js (v18+)
-- Python (v3.9+)
-- Git
+Node.js v18+
 
----
+Python v3.9+
 
-##  Environment Variables
+Git
 
-Create `.env` files based on the example below.
+Clone Repos
+# Frontend
+git clone https://github.com/<your-username>/social-media-booster-frontend.git
+# Backend
+git clone https://github.com/<your-username>/social-media-booster-backend.git
 
-### Backend `.env.example`
+Environment Variables
 
+Backend .env.example
 
-CURRENCY_API_URL= https://socialmediabooster.onrender.com/convert-budget?amount=1000
+CURRENCY_API_URL=https://open.er-api.com/v6/latest/INR
+DATABASE_URL=sqlite:///./app.db
 
-
----
-
-##  Running Backend Locally
-
-```bash
-cd backend
+Database & Migrations
+# Activate virtual environment
 python -m venv venv
-source venv/bin/activate
+source venv/bin/activate  # Windows: venv\Scripts\activate
+
+# Install requirements
 pip install -r requirements.txt
+
+# Run migrations (create database tables)
+python -m app.db_init
+
+Running Backend Locally
+cd backend
 uvicorn app.main:app --reload
 
 
-Backend runs at:
-
-http://127.0.0.1:8000
+Backend runs at: http://127.0.0.1:8000
 
 Running Frontend Locally
 cd frontend
 npm install
 npm run dev
+
+
+Frontend runs at: http://localhost:5173
+
+*  How to Test
+-> CRUD Operations
+
+Open live frontend URL
+
+Go to Campaigns page
+
+Click Create Campaign → fill in details → Save
+
+View the list of campaigns
+
+Click Edit to update a campaign → Save
+
+Click Delete to remove a campaign
+
+-> Report / Visualization
+
+Navigate to Reports page
+
+Budget charts display live data from the database
+
+-> Third-Party API Feature
+
+Click USD button on a campaign budget
+
+Backend converts INR → USD using currency API and shows result
+
+->  Deployment Notes
+
+Frontend: Hosted on [Vercel/Netlify/AWS Amplify]
+
+Backend: Hosted on [AWS EC2/Azure App Service/GCP App Engine]
+
+Ensure CORS is enabled in backend for frontend domain
+
+Environment variables must be set in hosting platform
 
 
 Frontend runs at:
