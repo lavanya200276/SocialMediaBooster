@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Dashboard from "./Dashboard";
 
-const API_URL = "https://socialmediabooster.onrender.com/campaigns";
+const API_URL = "https://socialmediabooster.onrender.com/campaigns/";
 const CONVERT_URL = "https://socialmediabooster.onrender.com/convert-budget";
 
 
@@ -16,14 +16,11 @@ export default function CampaignList() {
 
   /* ---------------- FETCH ---------------- */
   const fetchCampaigns = async () => {
-  try {
-    const res = await fetch(API_URL);
-    const data = await res.json();
-    setCampaigns(Array.isArray(data) ? data : []);
-  } catch (error) {
-    console.error("Error fetching campaigns:", error);
-  }
+  const res = await fetch(API_URL);
+  const data = await res.json();
+  setCampaigns(Array.isArray(data) ? data : []);
 };
+
 
 
 
