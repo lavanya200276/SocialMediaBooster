@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Dashboard from "./Dashboard";
 
-const API_URL = "https://socialmediabooster.onrender.com/campaigns/";
+const API_URL = "https://socialmediabooster.onrender.com/campaigns";
 const CONVERT_URL = "https://socialmediabooster.onrender.com/convert-budget";
 
 
@@ -29,11 +29,16 @@ export default function CampaignList() {
   }, []);
 
   const showUsdConversion = async (amount) => {
+  try {
     const res = await fetch(`${CONVERT_URL}?amount=${amount}`);
     const data = await res.json();
     setConversion(data);
     setShowModal(true);
-  };
+  } catch (err) {
+    alert("Conversion failed. Try again.");
+  }
+};
+
   /* ---------------- CREATE / UPDATE ---------------- */
   const handleCreateOrUpdate = async () => {
     if (!name || !budget || !platform) {
@@ -44,7 +49,7 @@ export default function CampaignList() {
     const payload = { name, budget: Number(budget), platform };
 
     if (editingId) {
-      await fetch(`${API_URL}${editingId}`, {
+      await fetch(`${API_URL}/${editingId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -63,10 +68,11 @@ export default function CampaignList() {
 
   /* ---------------- DELETE ---------------- */
   const handleDelete = async (id) => {
-    if (!window.confirm("Delete this campaign?")) return;
-    await fetch(`${API_URL}/${id}`, { method: "DELETE" });
-    fetchCampaigns();
-  };
+  if (!window.confirm("Delete this campaign?")) return;
+  await fetch(`${API_URL}/${id}`, { method: "DELETE" });
+  fetchCampaigns();
+};
+
 
   /* ---------------- EDIT ---------------- */
   const handleEdit = (c) => {
@@ -182,36 +188,47 @@ export default function CampaignList() {
 
           {/* TABLE */}
           <div style={{ overflowY: "auto", flex: 1 }}>
-            <table width="100%">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Budget (₹)</th>
-                  <th>Platform</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                  {campaigns.map((c) => (
-                    <tr key={c.id}>
-                      <td>{c.name}</td>
-                      <td>₹{c.budget}</td>
-                      <td>{c.platform}</td>
-                      <td>
-  <div className="action-buttons">
-    <button onClick={() => handleEdit(c)}>Edit</button>
-    <button onClick={() => showUsdConversion(c.budget)}>USD</button>
-    <button className="danger" onClick={() => handleDelete(c.id)}>
-      Delete
-    </button>
-  </div>
-</td>
+  <table width="100%" style={{ tableLayout: "fixed" }}>
+    <colgroup>
+      <col style={{ width: "40%" }} />  {/* Name */}
+      <col style={{ width: "20%" }} />  {/* Budget */}
+      <col style={{ width: "20%" }} />  {/* Platform */}
+      <col style={{ width: "25%" }} />  {/* Actions */}
+    </colgroup>
 
-                    </tr>
-                  ))}
-                </tbody>
-            </table>
-          </div>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Budget (₹)</th>
+        <th>Platform</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {campaigns.map((c) => (
+        <tr key={c.id}>
+          <td>{c.name}</td>
+          <td>₹{c.budget}</td>
+          <td>{c.platform}</td>
+          <td>
+            <div className="action-buttons">
+              <button onClick={() => handleEdit(c)}>Edit</button>
+              <button onClick={() => showUsdConversion(c.budget)}>USD</button>
+              <button
+                className="danger"
+                onClick={() => handleDelete(c.id)}
+              >
+                Delete
+              </button>
+            </div>
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
         </div>
       </div>
     </div>
